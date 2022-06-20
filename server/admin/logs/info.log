@@ -1,0 +1,6 @@
+2022-06-20T17:15:37.014+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize database connections
+2022-06-20T17:16:34.773+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize database connections
+2022-06-20T17:16:34.778+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize configuration
+2022-06-20T17:16:34.807+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize navigation buttons
+2022-06-20T17:16:34.807+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize plugins
+2022-06-20T17:16:34.807+0800	[34mINFO[0m	engine/engine.go:402	=====> Initialize success🍺🍺
