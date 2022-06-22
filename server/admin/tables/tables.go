@@ -15,6 +15,19 @@ import "github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 // example end
 //
 var Generators = map[string]table.Generator{
-
-	// generators end
+	"twitter_account":          GetTwitterAccountTable,
+	"twitter_account_daily":    GetTwitterAccountDailyLog,
+	"twitter_account_realtime": GetTwitterAccountRealTime,
+	"tweets":                   GetTweetsTable,
+	"telegram_group":           GetTelegramGroupTable,
+	"telegram_group_daily":     GetTelegramGroupDailyTable,
+	"telegram_group_realtime":  GetTelegramGroupRealTimeTable,
+	"telegram_member":          GetTelegramGroupMemberTable,
+	"discord_guild":            GetDiscordGuildTable,
+	"discord_guild_realtime":   GetDiscordGuildRealTimeTable,
+	"discord_guild_daily":      GetDiscordGuildDailyTable,
+	"discord_guild_member":     GetDiscordGuildMemberTable,
+	"discord_channel":          GetDiscordChannelTable,
+	"discord_channel_realtime": GetDiscordChannelRealTimeTable,
+	"discord_channel_daily":    GetDiscordGuildChannelDailyTable,
 }

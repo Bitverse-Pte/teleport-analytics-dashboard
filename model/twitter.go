@@ -25,7 +25,7 @@ type TwitterAccountRealTimeStat struct {
 	Date             time.Time
 	FollowersCount   int `gorm:"column:followersCount"`
 	FollowingCount   int `gorm:"column:followingCount"`
-	TweetCount       int `gorm:"column:tweetCount`
+	TweetCount       int `gorm:"column:tweetCount"`
 	ListedCount      int `gorm:"column:listedCount"`
 }
 
