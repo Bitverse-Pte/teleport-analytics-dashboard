@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/GoAdminGroup/go-admin/modules/config"
+	"github.com/GoAdminGroup/go-admin/modules/logger"
+	"github.com/joho/godotenv"
 	"github.com/teleport-network/teleport-analytics-dashboard/server/admin/models"
 	"github.com/teleport-network/teleport-analytics-dashboard/server/admin/pages"
 	"github.com/teleport-network/teleport-analytics-dashboard/server/admin/tables"
@@ -21,6 +23,9 @@ import (
 )
 
 func main() {
+	if err := godotenv.Load(".env"); err != nil {
+		logger.Warn(err.Error())
+	}
 	startServer()
 }
 
@@ -33,7 +38,8 @@ func startServer() {
 	template.AddComp(chartjs.NewChart())
 
 	eng := engine.Default()
-	eng.AddConfig(&config.Config{
+
+	if err := eng.AddConfig(&config.Config{
 		Databases: config.DatabaseList{
 			"default": config.Database{
 				Host:   os.Getenv("DATABASE_HOST"),
@@ -42,6 +48,9 @@ func startServer() {
 				Pwd:    os.Getenv("DATABASE_PWD"),
 				Name:   os.Getenv("DATABASE_NAME"),
 				Driver: os.Getenv("DATABASE_DRIVER"),
+				Params: map[string]string{
+					"parseTime": "true",
+				},
 			},
 		},
 		AppID:     os.Getenv("APP_ID"),
@@ -52,30 +61,22 @@ func startServer() {
 			Path:   os.Getenv("STORE_PATH"),
 			Prefix: os.Getenv("STORE_PREFIX"),
 		},
-		Title:              os.Getenv("TITLE"),
-		Logo:               template.HTML(os.Getenv("LOGO")),
-		MiniLogo:           template.HTML(os.Getenv("MINI_LOGO")),
-		IndexUrl:           os.Getenv("INDEX_URL"),
-		LoginUrl:           os.Getenv("LOGIN_URL"),
-		Debug:              os.Getenv("DEBUG") == "true",
-		Env:                os.Getenv("ENV"),
-		InfoLogPath:        os.Getenv("INFO_LOG_PATH"),
-		ErrorLogPath:       os.Getenv("ERROR_LOG_PATH"),
-		AccessLogPath:      os.Getenv("ACCESS_LOG_PATH"),
-		AccessAssetsLogOff: false,
-		SqlLog:             false,
-		AccessLogOff:       false,
-		InfoLogOff:         false,
-		ErrorLogOff:        false,
-		SessionLifeTime:    86400,
-		AssetUrl:           os.Getenv("ASSET_URL"),
+		Title:           os.Getenv("TITLE"),
+		Logo:            template.HTML(os.Getenv("LOGO")),
+		MiniLogo:        template.HTML(os.Getenv("MINI_LOGO")),
+		IndexUrl:        os.Getenv("INDEX_URL"),
+		LoginUrl:        os.Getenv("LOGIN_URL"),
+		Debug:           os.Getenv("DEBUG") == "true",
+		Env:             os.Getenv("ENV"),
+		InfoLogPath:     os.Getenv("INFO_LOG_PATH"),
+		ErrorLogPath:    os.Getenv("ERROR_LOG_PATH"),
+		AccessLogPath:   os.Getenv("ACCESS_LOG_PATH"),
+		SessionLifeTime: 86400,
+		AssetUrl:        os.Getenv("ASSET_URL"),
 		FileUploadEngine: config.FileUploadEngine{
 			Name: os.Getenv("FILE_UPLOAD_ENGINE_NAME"),
 		},
-	})
-
-	if err := eng.AddConfigFromYAML("./config.yml").
-		AddGenerators(tables.Generators).
+	}).AddGenerators(tables.Generators).
 		Use(r); err != nil {
 		panic(err)
 	}
