@@ -38,7 +38,7 @@ func GetTwitterAccountRealTime(ctx *context.Context) (t table.Table) {
 			JoinField: "accountId",
 		}).FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike})
 	info.AddField("Date", "date", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
-		t, err := time.Parse("2006-01-02 15:04:05", value.Value)
+		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
 		if err != nil {
 			return ""
 		}
@@ -62,7 +62,13 @@ func GetTwitterAccountDailyLog(ctx *context.Context) (t table.Table) {
 			Field:     "twitterAccountId",
 			JoinField: "accountId",
 		}).FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike})
-	info.AddField("Date", "date", db.Time)
+	info.AddField("Date", "date", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
+		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
+		if err != nil {
+			return ""
+		}
+		return t.In(time.FixedZone("GMT", 8*3600)).Format("2006-01-02 15:04:05")
+	})
 	info.AddField("Followers Count", "followersCount", db.Int)
 	info.AddField("New Followers", "newFollowersCount", db.Int)
 	info.AddField("Tweet Count", "tweetCount", db.Int)

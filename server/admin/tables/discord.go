@@ -38,7 +38,7 @@ func GetDiscordGuildDailyTable(ctx *context.Context) (t table.Table) {
 		return "-"
 	})
 	info.AddField("Date", "date", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
-		t, err := time.Parse("2006-01-02 15:04:05", value.Value)
+		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
 		if err != nil {
 			return ""
 		}
@@ -71,7 +71,7 @@ func GetDiscordGuildRealTimeTable(ctx *context.Context) (t table.Table) {
 	})
 
 	info.AddField("Created At", "createdAt", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
-		t, err := time.Parse("2006-01-02 15:04:05", value.Value)
+		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
 		if err != nil {
 			return ""
 		}

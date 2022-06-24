@@ -6,8 +6,8 @@ import (
 )
 
 type TelegramGroup struct {
-	ID     uint    `gorm:"primary_key"`
-	ChatId big.Int `gorm:"type:decimal(65,0);column:chatId"`
+	ID     uint  `gorm:"primary_key"`
+	ChatId int64 `gorm:"type:decimal(65,0);column:chatId"`
 }
 
 func (TelegramGroup) TableName() string {
@@ -16,7 +16,7 @@ func (TelegramGroup) TableName() string {
 
 type TelegramGroupStats struct {
 	ID                uint          `gorm:"primary_key"`
-	ChatGroupID       big.Int       `gorm:"column:groupId"`
+	ChatGroupID       int64         `gorm:"column:groupId"`
 	ChatGroup         TelegramGroup `gorm:"foreignKey:ChatGroupID"`
 	Date              time.Time
 	NewMemberCount    int `gorm:"column:newMemberCount"`

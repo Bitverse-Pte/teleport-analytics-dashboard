@@ -17,3 +17,7 @@ func Init(c db.Connection) {
 		panic("initialize orm failed")
 	}
 }
+
+func GetDB() *gorm.DB {
+	return orm
+}
