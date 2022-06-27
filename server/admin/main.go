@@ -39,7 +39,8 @@ func startServer() {
 
 	eng := engine.Default()
 
-	if err := eng.AddConfig(&osEnv).AddGenerators(tables.Generators).
+	env := getEnv()
+	if err := eng.AddConfig(&env).AddGenerators(tables.Generators).
 		Use(r); err != nil {
 		panic(err)
 	}
@@ -62,41 +63,43 @@ func startServer() {
 	eng.MysqlConnection().Close()
 }
 
-var osEnv = config.Config{
-	Databases: config.DatabaseList{
-		"default": config.Database{
-			Host:   os.Getenv("DATABASE_HOST"),
-			Port:   os.Getenv("DATABASE_PORT"),
-			User:   os.Getenv("DATABASE_USER"),
-			Pwd:    os.Getenv("DATABASE_PWD"),
-			Name:   os.Getenv("DATABASE_NAME"),
-			Driver: os.Getenv("DATABASE_DRIVER"),
-			Params: map[string]string{
-				"parseTime": "true",
+func getEnv() config.Config {
+	return config.Config{
+		Databases: config.DatabaseList{
+			"default": config.Database{
+				Host:   os.Getenv("DATABASE_HOST"),
+				Port:   os.Getenv("DATABASE_PORT"),
+				User:   os.Getenv("DATABASE_USER"),
+				Pwd:    os.Getenv("DATABASE_PWD"),
+				Name:   os.Getenv("DATABASE_NAME"),
+				Driver: os.Getenv("DATABASE_DRIVER"),
+				Params: map[string]string{
+					"parseTime": "true",
+				},
 			},
 		},
-	},
-	AppID:     os.Getenv("APP_ID"),
-	Language:  os.Getenv("LANGUAGE"),
-	UrlPrefix: os.Getenv("URL_PREFIX"),
-	Theme:     os.Getenv("THEME"),
-	Store: config.Store{
-		Path:   os.Getenv("STORE_PATH"),
-		Prefix: os.Getenv("STORE_PREFIX"),
-	},
-	Title:           os.Getenv("TITLE"),
-	Logo:            template.HTML(os.Getenv("LOGO")),
-	MiniLogo:        template.HTML(os.Getenv("MINI_LOGO")),
-	IndexUrl:        os.Getenv("INDEX_URL"),
-	LoginUrl:        os.Getenv("LOGIN_URL"),
-	Debug:           os.Getenv("DEBUG") == "true",
-	Env:             os.Getenv("ENV"),
-	InfoLogPath:     os.Getenv("INFO_LOG_PATH"),
-	ErrorLogPath:    os.Getenv("ERROR_LOG_PATH"),
-	AccessLogPath:   os.Getenv("ACCESS_LOG_PATH"),
-	SessionLifeTime: 86400,
-	AssetUrl:        os.Getenv("ASSET_URL"),
-	FileUploadEngine: config.FileUploadEngine{
-		Name: os.Getenv("FILE_UPLOAD_ENGINE_NAME"),
-	},
+		AppID:     os.Getenv("APP_ID"),
+		Language:  os.Getenv("LANGUAGE"),
+		UrlPrefix: os.Getenv("URL_PREFIX"),
+		Theme:     os.Getenv("THEME"),
+		Store: config.Store{
+			Path:   os.Getenv("STORE_PATH"),
+			Prefix: os.Getenv("STORE_PREFIX"),
+		},
+		Title:           os.Getenv("TITLE"),
+		Logo:            template.HTML(os.Getenv("LOGO")),
+		MiniLogo:        template.HTML(os.Getenv("MINI_LOGO")),
+		IndexUrl:        os.Getenv("INDEX_URL"),
+		LoginUrl:        os.Getenv("LOGIN_URL"),
+		Debug:           os.Getenv("DEBUG") == "true",
+		Env:             os.Getenv("ENV"),
+		InfoLogPath:     os.Getenv("INFO_LOG_PATH"),
+		ErrorLogPath:    os.Getenv("ERROR_LOG_PATH"),
+		AccessLogPath:   os.Getenv("ACCESS_LOG_PATH"),
+		SessionLifeTime: 86400,
+		AssetUrl:        os.Getenv("ASSET_URL"),
+		FileUploadEngine: config.FileUploadEngine{
+			Name: os.Getenv("FILE_UPLOAD_ENGINE_NAME"),
+		},
+	}
 }
