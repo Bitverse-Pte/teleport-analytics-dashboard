@@ -21,8 +21,12 @@ func (WalletDaily) TableName() string {
 type WalletType string
 
 const (
-	WalletTypeExtension = "Extension"
+	WalletTypeExtension WalletType = "Extension"
 )
+
+func (w WalletType) String() string {
+	return string(w)
+}
 
 func (ct *WalletType) Scan(value interface{}) error {
 	*ct = WalletType(value.([]byte))
