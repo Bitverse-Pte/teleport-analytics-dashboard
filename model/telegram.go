@@ -1,7 +1,6 @@
 package model
 
 import (
-	"math/big"
 	"time"
 )
 
@@ -31,7 +30,7 @@ func (TelegramGroupStats) TableName() string {
 
 type TelegramGroupDailyStat struct {
 	ID                uint          `gorm:"primary_key"`
-	GroupID           big.Int       `gorm:"column:groupId"`
+	GroupID           int64         `gorm:"column:groupId"`
 	Group             TelegramGroup `gorm:"foreignKey:GroupID"`
 	Date              time.Time
 	NewMemberCount    int `gorm:"column:newMemberCount"`
@@ -46,8 +45,8 @@ func (TelegramGroupDailyStat) TableName() string {
 
 type TelegramChatMember struct {
 	ID           uint          `gorm:"primary_key"`
-	UserId       big.Int       `gorm:"column:userId"`
-	GroupID      big.Int       `gorm:"column:groupId"`
+	UserId       int64         `gorm:"column:userId"`
+	GroupID      int64         `gorm:"column:groupId"`
 	Group        TelegramGroup `gorm:"foreignKey:GroupID"`
 	JoinAt       time.Time     `gorm:"column:joinAt"`
 	MessageCount int           `gorm:"column:messageCount"`

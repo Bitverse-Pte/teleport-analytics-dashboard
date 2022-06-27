@@ -1,6 +1,7 @@
 package tables
 
 import (
+	"fmt"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
@@ -8,6 +9,7 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 	"html/template"
+	"strings"
 	"time"
 )
 
@@ -27,7 +29,17 @@ func GetTelegramGroupTable(ctx *context.Context) (t table.Table) {
 				WithModal().GetContent()
 		}
 	})
-	info.AddField("Group Name", "title", db.Varchar).FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike})
+	info.AddField("Group Name", "title", db.Varchar).FieldDisplay(func(value types.FieldModel) interface{} {
+		if value.Value == "" {
+			return "-"
+		}
+		return template2.Default().Link().
+			SetURL(fmt.Sprintf("tg://resolve?domain=%s", strings.ReplaceAll(value.Value, " ", ""))).
+			SetContent(template.HTML(value.Value)).
+			SetAttributes("target=_blank").
+			GetContent()
+	})
+
 	info.AddField("Invite Link", "invite_link", db.Varchar)
 	info.SetTable("TelegramGroup").SetTitle("Telegram Chat Group Manager").SetDescription("")
 	return
@@ -41,7 +53,16 @@ func GetTelegramGroupDailyTable(ctx *context.Context) (t table.Table) {
 	info.AddField("Group Name", "title", db.Varchar).FieldJoin(types.Join{
 		Table:     "TelegramGroup",
 		Field:     "groupId",
-		JoinField: "id",
+		JoinField: "chatId",
+	}).FieldDisplay(func(value types.FieldModel) interface{} {
+		if value.Value == "" {
+			return "-"
+		}
+		return template2.Default().Link().
+			SetURL(fmt.Sprintf("tg://resolve?domain=%s", strings.ReplaceAll(value.Value, " ", ""))).
+			SetContent(template.HTML(value.Value)).
+			SetAttributes("target=_blank").
+			GetContent()
 	})
 	info.AddField("Date", "date", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
 		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
@@ -67,8 +88,18 @@ func GetTelegramGroupRealTimeTable(ctx *context.Context) (t table.Table) {
 	info.AddField("Group Name", "title", db.Varchar).FieldJoin(types.Join{
 		Table:     "TelegramGroup",
 		Field:     "groupId",
-		JoinField: "id",
-	}).FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike})
+		JoinField: "chatId",
+	}).FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike}).
+		FieldDisplay(func(value types.FieldModel) interface{} {
+			if value.Value == "" {
+				return "-"
+			}
+			return template2.Default().Link().
+				SetURL(fmt.Sprintf("tg://resolve?domain=%s", strings.ReplaceAll(value.Value, " ", ""))).
+				SetContent(template.HTML(value.Value)).
+				SetAttributes("target=_blank").
+				GetContent()
+		})
 	info.AddField("Date", "date", db.Time).FieldDisplay(func(value types.FieldModel) interface{} {
 		t, err := time.Parse("2006-01-02T15:04:05Z", value.Value)
 		if err != nil {
