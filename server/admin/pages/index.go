@@ -16,6 +16,8 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"html/template"
+	"sort"
+	"time"
 )
 
 func GetDashBoard(ctx *context.Context) (types.Panel, error) {
@@ -87,18 +89,33 @@ func GetDashBoard(ctx *context.Context) (types.Panel, error) {
 	 * Box
 	/**************************/
 
+	var list []model.WalletDaily
+	if err := models.GetDB().Where("date > ?", time.Now().Add(-30*time.Hour*24)).Find(&list).Error; err != nil {
+		logger.Warn(err.Error())
+	}
+	sort.Slice(list, func(i, j int) bool {
+		return list[i].Date.Before(list[j].Date)
+	})
+	var dates []string
+	var newDownload []float64
+	var total []float64
+	for _, one := range list {
+		dates = append(dates, one.Date.Format("2006/01/02"))
+		newDownload = append(newDownload, float64(one.NewDownloadCount))
+		total = append(total, float64(one.DownloadCount))
+	}
 	lineChart := chartjs.Line().
 		SetID("salechart").
 		SetHeight(180).
-		SetTitle("Sales: 1 Jan, 2019 - 30 Jul, 2019").
-		SetLabels([]string{"January", "February", "March", "April", "May", "June", "July"}).
-		AddDataSet("Electronics").
-		DSData([]float64{65, 59, 80, 81, 56, 55, 40}).
+		SetTitle("Last 30 days Wallet Installation").
+		SetLabels(dates).
+		AddDataSet("New Install").
+		DSData(newDownload).
 		DSFill(false).
 		DSBorderColor("rgb(210, 214, 222)").
 		DSLineTension(0.1).
-		AddDataSet("Digital Goods").
-		DSData([]float64{28, 48, 40, 19, 86, 27, 90}).
+		AddDataSet("Wallet Total Install").
+		DSData(total).
 		DSFill(false).
 		DSBorderColor("rgba(60,141,188,1)").
 		DSLineTension(0.1).
