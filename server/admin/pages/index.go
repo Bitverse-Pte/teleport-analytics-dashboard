@@ -65,11 +65,23 @@ func GetDashBoard(ctx *context.Context) (types.Panel, error) {
 		SetContent(template.HTML(`<div><div title="" style="margin-right: 16px;"><span><span>Week Compare</span><span style="margin-left: 8px;">12%</span></span><span style="color: #f5222d;margin-left: 4px;top: 1px;"><i style="font-size: 12px;" aria-label="图标: caret-up" class="anticon anticon-caret-up"><svg viewBox="0 0 1024 1024" focusable="false" class="" data-icon="caret-up" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M858.9 689L530.5 308.2c-9.4-10.9-27.5-10.9-37 0L165.1 689c-12.2 14.2-1.2 35 18.5 35h656.8c19.7 0 30.7-20.8 18.5-35z"></path></svg></i></span></div><div class="antd-pro-pages-dashboard-analysis-components-trend-index-trendItem" title=""><span><span>Day Compare</span><span style="margin-left: 8px;">11%</span></span><span style="color: #52c41a;margin-left: 4px;top: 1px;"><i style="font-size: 12px;" aria-label="图标: caret-down" class="anticon anticon-caret-down"><svg viewBox="0 0 1024 1024" focusable="false" class="" data-icon="caret-down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"></path></svg></i></span></div></div>`)).
 		SetFooter(template.HTML(`ACTIVE <strong style="margin-left:8px;">` + p.Sprintf("%d", telegram.ActiveMemberCount) + `</strong>`))
 
-	var size = map[string]string{"md": "4", "sm": "6", "xs": "12"}
+	var walletDaily model.WalletDaily
+	if err := models.GetDB().Last(&walletDaily).Error; err != nil {
+		logger.Warn(err.Error())
+	}
+	card4 := card.New().
+		SetTitle("Wallet").
+		SetSubTitle(p.Sprintf("%d", walletDaily.DownloadCount)).
+		SetAction(template.HTML(`<i aria-label="图标: info-circle-o" class="anticon anticon-info-circle-o"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="info-circle" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"></path><path d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"></path></svg></i>`)).
+		SetContent(template.HTML(`<div><div title="" style="margin-right: 16px;"><span><span>Week Compare</span><span style="margin-left: 8px;">12%</span></span><span style="color: #f5222d;margin-left: 4px;top: 1px;"><i style="font-size: 12px;" aria-label="图标: caret-up" class="anticon anticon-caret-up"><svg viewBox="0 0 1024 1024" focusable="false" class="" data-icon="caret-up" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M858.9 689L530.5 308.2c-9.4-10.9-27.5-10.9-37 0L165.1 689c-12.2 14.2-1.2 35 18.5 35h656.8c19.7 0 30.7-20.8 18.5-35z"></path></svg></i></span></div><div class="antd-pro-pages-dashboard-analysis-components-trend-index-trendItem" title=""><span><span>Day Compare</span><span style="margin-left: 8px;">11%</span></span><span style="color: #52c41a;margin-left: 4px;top: 1px;"><i style="font-size: 12px;" aria-label="图标: caret-down" class="anticon anticon-caret-down"><svg viewBox="0 0 1024 1024" focusable="false" class="" data-icon="caret-down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"></path></svg></i></span></div></div>`)).
+		SetFooter(template.HTML(`TODAY NEW <strong style="margin-left:8px;">` + p.Sprintf("%d", walletDaily.NewDownloadCount) + `</strong>`))
+
+	var size = map[string]string{"md": "3", "sm": "6", "xs": "12"}
 	infoboxCol1 := colComp.SetSize(size).SetContent(card1.GetContent()).GetContent()
 	infoboxCol2 := colComp.SetSize(size).SetContent(card2.GetContent()).GetContent()
 	infoboxCol3 := colComp.SetSize(size).SetContent(card3.GetContent()).GetContent()
-	row1 := components.Row().SetContent(infoboxCol1 + infoboxCol2 + infoboxCol3).GetContent()
+	infoboxCol4 := colComp.SetSize(size).SetContent(card4.GetContent()).GetContent()
+	row1 := components.Row().SetContent(infoboxCol1 + infoboxCol2 + infoboxCol3 + infoboxCol4).GetContent()
 
 	/**************************
 	 * Box

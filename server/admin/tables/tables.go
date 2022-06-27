@@ -30,4 +30,5 @@ var Generators = map[string]table.Generator{
 	"discord_channel":          GetDiscordChannelTable,
 	"discord_channel_realtime": GetDiscordChannelRealTimeTable,
 	"discord_channel_daily":    GetDiscordGuildChannelDailyTable,
+	"wallet_daily":             GetWalletDailyDataTable,
 }

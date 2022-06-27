@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/jinzhu/gorm"
+	"github.com/teleport-network/teleport-analytics-dashboard/model"
 )
 
 var (
@@ -16,6 +17,9 @@ func Init(c db.Connection) {
 	if err != nil {
 		panic("initialize orm failed")
 	}
+
+	orm.AutoMigrate(&model.WalletDaily{})
+
 }
 
 func GetDB() *gorm.DB {

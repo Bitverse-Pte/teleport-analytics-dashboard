@@ -8,6 +8,8 @@ require (
 	github.com/gavv/httpexpect v2.0.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
 	github.com/jinzhu/gorm v1.9.16
+	github.com/joho/godotenv v1.4.0
+	golang.org/x/text v0.3.7
 )
 
 require (
@@ -36,7 +38,6 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
@@ -79,7 +80,6 @@ require (
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
-	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
