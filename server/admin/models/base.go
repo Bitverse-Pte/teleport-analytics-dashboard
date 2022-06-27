@@ -19,7 +19,6 @@ func Init(c db.Connection) {
 	}
 
 	orm.AutoMigrate(&model.WalletDaily{})
-
 }
 
 func GetDB() *gorm.DB {

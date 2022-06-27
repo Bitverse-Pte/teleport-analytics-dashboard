@@ -14,6 +14,10 @@ type WalletDaily struct {
 	NewDownloadCount int
 }
 
+func (WalletDaily) TableName() string {
+	return "WalletDaily"
+}
+
 type WalletType string
 
 const (
